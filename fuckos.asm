@@ -1,44 +1,51 @@
 main:
 
-	cli ;clear interrupts
-	mov ax, 0
-	mov ss, ax
-	mov sp, 0FFFFh
-	sti ;restore interrupts
-	cld
-	mov ax, 2000h
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
+        cli ;clear interrupts
+        mov ax, 0x00
+        mov ss, ax
+        mov sp, 0x0ffff
+        sti ;restore interrupts
+        cld
+        mov ax, 0x2000
+        mov ds, ax
+        mov es, ax
+        mov fs, ax
+        mov gs, ax
 
         mov ax, 0x01; 40 x 25 video mode
         int 0x10
         call cls
 
-        mov dh, 10
-        mov dl, 12
+        mov dh, 0x0a
+        mov dl, 0x0c
         call set_cursor_position
 
         mov si, os_name
         mov bl, 0x05
         call print_string
 
-        mov dl, 12
+        mov dl, 0x0c
         call set_cursor_position
         mov si, by_text
         call print_string
 
         inc dh
-        mov dl, 7
+        mov dl, 0x07
         call set_cursor_position
 
         mov bl, 0x0e
         mov si, key_text
         call print_string
 
+        call getch
+
+        mov ax, 0x03; 80 x 25 video mode
+        int 0x10
+        call cls
+
         jmp $
 
+; si = string to print
 print_string:
 
 .print:
@@ -97,10 +104,23 @@ get_cursor_position:
         int 0x10
         ret
 
+; ax = keypressed
+getch:
+        mov ah, 0x11
+        int 0x16
+        jnz .key_pressed
+        hlt
+        jmp getch
+
+.key_pressed:
+        mov ah, 0x10
+        int 0x16
+        ret
+
 os_name:
-        db "Fuck OS 1.0", 0
+        db "Fuck OS 1.0", 0x00
 by_text:
-        db "By: F. E. Silva", 0
+        db "By: F. E. Silva", 0x00
 
 key_text:
-        db "Press any key to continue", 0
+        db "Press any key to continue", 0x00
