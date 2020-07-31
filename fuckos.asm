@@ -43,7 +43,43 @@ main:
         int 0x10
         call cls
 
+        mov bx, os_name
+        call print_normal_string
+
+        mov bx, please_type
+        call print_normal_string
+
+        mov bx, prompt
+        call print_normal_string
+
         jmp $
+
+; bx = string to print
+print_normal_string:
+        pusha
+.start:
+        mov al, [bx]
+        cmp al, 0
+        je .ok
+        cmp al, 1
+        je .ok2
+
+        mov ah, 0x0e
+        
+        int 0x10
+        add bx, 1
+        jmp .start
+
+.ok:
+        mov al, 13
+        int 0x10
+        mov al, 10
+        int 0x10
+        popa
+        ret
+.ok2:
+        popa
+        ret
 
 ; si = string to print
 print_string:
@@ -121,6 +157,12 @@ os_name:
         db "Fuck OS 1.0", 0x00
 by_text:
         db "By: F. E. Silva", 0x00
+
+please_type:
+        db "Please type your command...", 0x00
+
+prompt:
+        db ">>> ", 0x01
 
 key_text:
         db "Press any key to continue", 0x00
