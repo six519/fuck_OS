@@ -49,6 +49,7 @@ main:
         mov bx, please_type
         call print_normal_string
 
+show_prompt:
         mov bx, prompt
         call print_normal_string
 
@@ -71,14 +72,18 @@ print_normal_string:
         jmp .start
 
 .ok:
-        mov al, 13
-        int 0x10
-        mov al, 10
-        int 0x10
+        call newline
         popa
         ret
 .ok2:
         popa
+        ret
+
+newline:
+        mov al, 13
+        int 0x10
+        mov al, 10
+        int 0x10
         ret
 
 ; si = string to print
