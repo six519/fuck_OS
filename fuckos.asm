@@ -53,14 +53,14 @@ main:
 
 show_prompt:
         mov di, cmd
-        mov cx, 32
+        mov cx, 0x20
         rep stosb
 
         mov si, prompt
         call print_normal_string
 
         mov ax, chars
-        mov bx, 64
+        mov bx, 0x40
         call readline
 
         call newline
@@ -69,7 +69,7 @@ show_prompt:
         call trim
 
         mov si, chars
-        cmp byte [si], 0
+        cmp byte [si], 0x00
         je show_prompt
 
         mov si, chars
@@ -95,6 +95,10 @@ show_prompt:
         call str_cmp
         jc fuck
 
+        mov di, reboot_str
+        call str_cmp
+        jc reboot
+
         mov si, invalid_str
         call print_normal_string
         call newline
@@ -105,14 +109,14 @@ show_prompt:
 ; si = string to print
 print_normal_string:
         pusha
-        mov ah, 0Eh
+        mov ah, 0x0e
 
 .repeat:
         lodsb
-        cmp al, 0
+        cmp al, 0x00
         je .done
 
-        int 10h
+        int 0x10
         jmp .repeat
 
 .done:
@@ -121,11 +125,11 @@ print_normal_string:
 
 newline:
         pusha
-        mov ah, 0Eh
-        mov al, 13
-        int 10h
-        mov al, 10
-        int 10h
+        mov ah, 0x0e
+        mov al, 0xd
+        int 0x10
+        mov al, 0xa
+        int 0x10
         popa
         ret
 
@@ -223,10 +227,10 @@ readline:
 
 .get_char:
         call getch
-        cmp al, 8
+        cmp al, 0x8
         je .backspace
 
-        cmp al, 13
+        cmp al, 0xd
         je .end_string
 
         jcxz .get_char
@@ -234,7 +238,7 @@ readline:
         cmp al, ' '
         jb .get_char
 
-        cmp al, 126
+        cmp al, 0x7e
         ja .get_char
 
         call .add_char
@@ -243,7 +247,7 @@ readline:
         jmp .get_char
 
 .end_string:
-        mov al, 0
+        mov al, 0x00
         stosb
 
 .done:
@@ -263,7 +267,7 @@ readline:
 .reverse_cursor:
         dec di 
         call get_cursor_position
-        cmp dl, 0
+        cmp dl, 0x00
         je .back_line
 
         dec dl
@@ -272,14 +276,14 @@ readline:
 
 .back_line:
         dec dh
-        mov dl, 79
+        mov dl, 0x4f
         call set_cursor_position
         ret
 
 .add_char:
         stosb
-        mov ah, 0x0E
-        mov bh, 0
+        mov ah, 0x0e
+        mov bh, 0x00
         push bp
         int 0x10
         pop bp
@@ -290,7 +294,7 @@ trim:
         pusha
         mov dx, ax
         mov di, ax
-        mov cx, 0
+        mov cx, 0x00
 
 .keepcounting:
         cmp byte [di], ' '
@@ -300,7 +304,7 @@ trim:
         jmp .keepcounting
 
 .counted:
-        cmp cx, 0
+        cmp cx, 0x00
         je .finished_copy
         mov si, di
         mov di, dx
@@ -308,7 +312,7 @@ trim:
 .keep_copying:
         mov al, [si]
         mov [di], al
-        cmp al, 0
+        cmp al, 0x00
         je .finished_copy
         inc si
         inc di
@@ -317,7 +321,7 @@ trim:
 .finished_copy:
         mov ax, dx
         call str_len
-        cmp ax, 0
+        cmp ax, 0x00
         je .done_trimming
         mov si, dx
         add si, ax
@@ -326,7 +330,7 @@ trim:
         dec si
         cmp byte [si], ' '
         jne .done_trimming
-        mov byte [si], 0
+        mov byte [si], 0x00
         jmp .more
 
 .done_trimming:
@@ -336,10 +340,10 @@ trim:
 str_len:
         pusha
         mov bx, ax
-        mov cx, 04
+        mov cx, 0x04
 
 .process_str_len:
-        cmp byte [bx], 0
+        cmp byte [bx], 0x00
         je .done_str_len
         inc bx
         inc cx
@@ -352,7 +356,7 @@ str_len:
         ret
 
 .tmp_counter:
-        dw 0
+        dw 0x00
 
 tokenize:
         push si
@@ -360,31 +364,31 @@ tokenize:
 .next_char:
         cmp byte [si], al
         je .return_token
-        cmp byte [si], 0
+        cmp byte [si], 0x00
         jz .no_more
         inc si
         jmp .next_char
 
 .return_token:
-        mov byte [si], 0
+        mov byte [si], 0x00
         inc si
         mov di, si
         pop si
         ret
 
 .no_more:
-        mov di, 0
+        mov di, 0x00
         pop si
         ret
 
 str_cpy:
         pusha
 .str_cpy_more:
-        mov al, [si]			; Transfer contents (at least one byte terminator)
+        mov al, [si]
         mov [di], al
         inc si
         inc di
-        cmp byte al, 0			; If source string is empty, quit out
+        cmp byte al, 0x00
         jne .str_cpy_more
         popa
         ret
@@ -399,7 +403,7 @@ str_cmp:
         cmp al, bl
         jne .not_same
 
-        cmp al, 0
+        cmp al, 0x00
         je .terminated
 
         inc si
@@ -441,6 +445,12 @@ fuck:
 
         jmp show_prompt
 
+reboot:
+        mov ds, ax
+        mov ax, 0x00
+        mov [0427], ax
+        jmp 0xffff:0x00
+
 os_name:
         db "Fuck OS 1.0", 0x00
 by_text:
@@ -470,6 +480,9 @@ clear_str:
 
 fuck_str:
         db "fuck", 0x00
+
+reboot_str:
+        db "reboot", 0x00
 
 invalid_str:
         db "Invalid command!", 0x00
