@@ -92,6 +92,10 @@ show_prompt:
         call str_cmp
         jc clear
 
+        mov di, fuck_str
+        call str_cmp
+        jc fuck
+
         mov si, invalid_str
         call print_normal_string
         call newline
@@ -427,6 +431,17 @@ clear:
         call cls
         jmp show_prompt
 
+fuck:
+        mov si, os_name
+        call print_normal_string
+        call newline
+
+        mov si, by_text
+        call print_normal_string
+        call newline
+
+        jmp show_prompt
+
 os_name:
         db "Fuck OS 1.0", 0x00
 by_text:
@@ -453,6 +468,9 @@ shutdown_str:
 
 clear_str:
         db "clear", 0x00
+
+fuck_str:
+        db "fuck", 0x00
 
 invalid_str:
         db "Invalid command!", 0x00
