@@ -86,11 +86,11 @@ show_prompt:
 
         mov di, shutdown_str
         call str_cmp
-        jc near shutdown
+        jc shutdown
 
         mov di, clear_str
         call str_cmp
-        jc near clear
+        jc clear
 
         mov si, invalid_str
         call print_normal_string
