@@ -78,7 +78,6 @@ show_prompt:
 
         mov word [params], di
 
-        mov si, chars
         mov di, cmd
         call str_cpy
 
