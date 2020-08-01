@@ -72,6 +72,31 @@ show_prompt:
         cmp byte [si], 0
         je show_prompt
 
+        mov si, chars
+        mov al, ' '
+        call tokenize
+
+        mov word [params], di
+
+        mov si, chars
+        mov di, cmd
+        call str_cpy
+
+        mov si, chars
+
+        mov di, shutdown_str
+        call str_cmp
+        jc near shutdown
+
+        mov di, clear_str
+        call str_cmp
+        jc near clear
+
+        mov si, invalid_str
+        call print_normal_string
+        call newline
+        jmp show_prompt
+
         jmp $
 
 ; si = string to print
@@ -326,6 +351,82 @@ str_len:
 .tmp_counter:
         dw 0
 
+tokenize:
+        push si
+
+.next_char:
+        cmp byte [si], al
+        je .return_token
+        cmp byte [si], 0
+        jz .no_more
+        inc si
+        jmp .next_char
+
+.return_token:
+        mov byte [si], 0
+        inc si
+        mov di, si
+        pop si
+        ret
+
+.no_more:
+        mov di, 0
+        pop si
+        ret
+
+str_cpy:
+        pusha
+.str_cpy_more:
+        mov al, [si]			; Transfer contents (at least one byte terminator)
+        mov [di], al
+        inc si
+        inc di
+        cmp byte al, 0			; If source string is empty, quit out
+        jne .str_cpy_more
+        popa
+        ret
+
+str_cmp:
+        pusha
+
+.str_cpy_more:
+        mov al, [si]
+        mov bl, [di]
+
+        cmp al, bl
+        jne .not_same
+
+        cmp al, 0
+        je .terminated
+
+        inc si
+        inc di
+        jmp .str_cpy_more
+
+.not_same:
+        popa
+        clc
+        ret
+
+.terminated:
+        popa
+        stc
+        ret
+
+shutdown:
+        mov ax, 0x1000
+        mov ax, ss
+        mov sp, 0xf000
+        mov ax, 0x5307
+        mov bx, 0x0001
+        mov cx, 0x0003
+        int 0x15
+        ret
+
+clear:
+        call cls
+        jmp show_prompt
+
 os_name:
         db "Fuck OS 1.0", 0x00
 by_text:
@@ -341,6 +442,17 @@ key_text:
         db "Press any key to continue", 0x00
 
 chars:
-        times 64 db 0
+        times 64 db 0x00
 cmd:
-        times 32 db 0
+        times 32 db 0x00
+
+params:
+        dw 0x00
+shutdown_str:
+        db "shutdown", 0x00
+
+clear_str:
+        db "clear", 0x00
+
+invalid_str:
+        db "Invalid command!", 0x00
