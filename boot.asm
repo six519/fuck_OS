@@ -1,4 +1,4 @@
-; Based on MikeOS boot loader (http://mikeos.sourceforge.net/#downloads)
+; Based on MikeOS (http://mikeos.sourceforge.net/#downloads)
 
         jmp short bootloader_start
         nop

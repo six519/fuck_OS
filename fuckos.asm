@@ -1,3 +1,5 @@
+; Based on MikeOS (http://mikeos.sourceforge.net/#downloads)
+
 main:
 
         cli ;clear interrupts
@@ -36,8 +38,9 @@ main:
         mov bl, 0x0e
         mov si, key_text
         call print_string
-
+        call hide_cursor
         call getch
+        call show_cursor
 
         mov ax, 0x03; 80 x 25 video mode
         int 0x10
@@ -450,6 +453,25 @@ reboot:
         mov ax, 0x00
         mov [0427], ax
         jmp 0xffff:0x00
+
+show_cursor:
+        pusha
+        mov ch, 0x06
+        mov cl, 0x07
+        mov ah, 0x01
+        mov al, 0x03
+        int 0x10
+        popa
+        ret
+
+hide_cursor:
+        pusha
+        mov ch, 0x20
+        mov ah, 0x01
+        mov al, 0x03
+        int 0x10
+        popa
+        ret
 
 os_name:
         db "Fuck OS 1.0", 0x00
