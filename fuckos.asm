@@ -81,8 +81,12 @@ show_prompt:
 
         mov word [params], di
 
+        mov si, chars
         mov di, cmd
         call str_cpy
+
+        mov ax, chars
+        call str_upper
 
         mov si, chars
 
@@ -117,12 +121,12 @@ print_normal_string:
 .repeat:
         lodsb
         cmp al, 0x00
-        je .done
+        je .print_done
 
         int 0x10
         jmp .repeat
 
-.done:
+.print_done:
         popa
         ret
 
@@ -223,7 +227,7 @@ getch:
 readline:
         pusha
         cmp bx, 0x00
-        je .done
+        je .readline_done
         mov di, ax
         dec bx
         mov cx, bx
@@ -253,7 +257,7 @@ readline:
         mov al, 0x00
         stosb
 
-.done:
+.readline_done:
         popa
         ret
 
@@ -329,12 +333,12 @@ trim:
         mov si, dx
         add si, ax
 
-.more:
+.trim_more:
         dec si
         cmp byte [si], ' '
         jne .done_trimming
         mov byte [si], 0x00
-        jmp .more
+        jmp .trim_more
 
 .done_trimming:
         popa
@@ -382,6 +386,33 @@ tokenize:
 .no_more:
         mov di, 0x00
         pop si
+        ret
+
+str_upper:
+        pusha
+
+        mov si, ax
+
+.str_upper_more:
+        cmp byte [si], 0x00
+        je .str_upper_done
+
+        cmp byte [si], 'a'
+        jb .str_upper_noatoz
+        cmp byte [si], 'z'
+        ja .str_upper_noatoz
+
+        sub byte [si], 0x20
+
+        inc si
+        jmp .str_upper_more
+
+.str_upper_noatoz:
+        inc si
+        jmp .str_upper_more
+
+.str_upper_done:
+        popa
         ret
 
 str_cpy:
@@ -495,16 +526,16 @@ cmd:
 params:
         dw 0x00
 shutdown_str:
-        db "shutdown", 0x00
+        db "SHUTDOWN", 0x00
 
 clear_str:
-        db "clear", 0x00
+        db "CLEAR", 0x00
 
 fuck_str:
-        db "fuck", 0x00
+        db "FUCK", 0x00
 
 reboot_str:
-        db "reboot", 0x00
+        db "REBOOT", 0x00
 
 invalid_str:
         db "Invalid command!", 0x00

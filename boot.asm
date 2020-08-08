@@ -280,11 +280,11 @@ l2hts:
 
 
 os_filename:
-        db "FUCKOS  BIN"
+        db "FUCKOS  FUK"
 disk_error:
         db "Disk error! Press any key...", 0
 file_not_found:
-        db "FUCKOS.BIN not found!", 0
+        db "FUCKOS.FUK not found!", 0
 bootdev:
         db 0
 cluster:
