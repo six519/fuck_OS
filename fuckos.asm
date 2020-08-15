@@ -799,6 +799,32 @@ fuck:
         mov cx, 16
         int 0x10
 
+        mov cx, 3
+        mov dx, 13
+        int 0x10
+        mov cx, 4
+        int 0x10
+        mov cx, 6
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 15
+        int 0x10
+        mov cx, 16
+        int 0x10
+
         call getch
 
 reboot:
