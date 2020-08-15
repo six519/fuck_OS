@@ -827,6 +827,168 @@ fuck:
         mov cx, 16
         int 0x10
 
+        mov cx, 4
+        mov dx, 14
+        int 0x10
+        mov cx, 6
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 15
+        int 0x10
+        mov cx, 16
+        int 0x10
+
+        mov cx, 4
+        mov dx, 15
+        int 0x10
+        mov cx, 5
+        int 0x10
+        mov cx, 6
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 15
+        int 0x10
+        mov cx, 16
+        int 0x10
+
+        mov cx, 5
+        mov dx, 16
+        int 0x10
+        mov cx, 6
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 15
+        int 0x10
+
+        mov cx, 5
+        mov dx, 17
+        int 0x10
+        mov cx, 6
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 15
+        int 0x10
+
+        mov cx, 6
+        mov dx, 18
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 15
+        int 0x10
+
+        mov cx, 6
+        mov dx, 19
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 14
+        int 0x10
+
+        mov cx, 7
+        mov dx, 20
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 14
+        int 0x10
+
         call getch
 
 reboot:
