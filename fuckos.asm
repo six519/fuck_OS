@@ -42,6 +42,7 @@ main:
         call getch
         call show_cursor
 
+start_cmd:
         mov ax, 0x03; 80 x 25 video mode
         int 0x10
         call cls
@@ -469,15 +470,336 @@ clear:
         jmp show_prompt
 
 fuck:
-        mov si, os_name
-        call print_normal_string
-        call newline
+        ;set to graphics mode (320x200x256)
+        mov ax, 0x13 ;al = 13h, ah = 0h
+        int 0x10
+        mov ax, 0xa000
+        mov es, ax
+        mov ax, 0 ;top left corner
+        mov di, ax ;coords to put the pixel
+        mov al, 0x01 ;blue
+        mov cx, 64000 ;6400 = 320 * 200
+        rep stosb
 
-        mov si, by_text
-        call print_normal_string
-        call newline
+        mov ah, 0x0c ; change color for a single pixel
+        mov al, 0x00 ; color
+        mov bh, 0 ; page number
 
-        jmp show_prompt
+        mov cx, 9
+        mov dx, 1
+        int 0x10
+        mov cx, 10
+        int 0x10
+
+        mov cx, 8
+        mov dx, 2
+        int 0x10
+        mov cx, 11
+        int 0x10
+
+        mov cx, 8
+        mov dx, 3
+        int 0x10
+        mov cx, 11
+        int 0x10
+
+        mov cx, 8
+        mov dx, 4
+        int 0x10
+        mov cx, 11
+        int 0x10
+
+        mov cx, 8
+        mov dx, 5
+        int 0x10
+        mov cx, 11
+        int 0x10
+
+        mov cx, 8
+        mov dx, 6
+        int 0x10
+        mov cx, 11
+        int 0x10
+
+        mov cx, 8
+        mov dx, 7
+        int 0x10
+        mov cx, 11
+        int 0x10
+
+        mov cx, 6
+        mov dx, 8
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+
+        mov cx, 5
+        mov dx, 9
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 15
+        int 0x10
+
+        mov cx, 1
+        mov dx, 10
+        int 0x10
+        mov cx, 2
+        int 0x10
+        mov cx, 3
+        int 0x10
+        mov cx, 5
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 16
+        int 0x10
+
+        mov cx, 1
+        mov dx, 11
+        int 0x10
+        mov cx, 4
+        int 0x10
+        mov cx, 5
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 17
+        int 0x10
+
+        mov cx, 1
+        mov dx, 12
+        int 0x10
+        mov cx, 5
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 17
+        int 0x10
+
+        mov cx, 2
+        mov dx, 13
+        int 0x10
+        mov cx, 5
+        int 0x10
+        mov cx, 17
+        int 0x10
+
+        mov cx, 3
+        mov dx, 14
+        int 0x10
+        mov cx, 5
+        int 0x10
+        mov cx, 17
+        int 0x10
+
+        mov cx, 3
+        mov dx, 15
+        int 0x10
+        mov cx, 17
+        int 0x10
+
+        mov cx, 4
+        mov dx, 16
+        int 0x10
+        mov cx, 16 
+        int 0x10
+
+        mov cx, 4
+        mov dx, 17
+        int 0x10
+        mov cx, 16 
+        int 0x10
+
+        mov cx, 5
+        mov dx, 18
+        int 0x10
+        mov cx, 16
+        int 0x10
+
+
+        mov cx, 5
+        mov dx, 19
+        int 0x10
+        mov cx, 15
+        int 0x10
+
+        mov cx, 6
+        mov dx, 20
+        int 0x10
+        mov cx, 15
+        int 0x10
+
+
+        mov cx, 6
+        mov dx, 21
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 14
+        int 0x10
+        mov cx, 15
+        int 0x10
+
+        mov ah, 0x0c
+        mov al, 0x06 ; brown
+        mov bh, 0
+
+        mov cx, 9
+        mov dx, 2
+        int 0x10
+        mov cx, 10
+        int 0x10
+
+        mov cx, 9
+        mov dx, 3
+        int 0x10
+        mov cx, 10
+        int 0x10
+
+        mov cx, 9
+        mov dx, 4
+        int 0x10
+        mov cx, 10
+        int 0x10
+
+        mov cx, 9
+        mov dx, 5
+        int 0x10
+        mov cx, 10
+        int 0x10
+
+        mov cx, 9
+        mov dx, 6
+        int 0x10
+        mov cx, 10
+        int 0x10
+
+        mov cx, 9
+        mov dx, 7
+        int 0x10
+        mov cx, 10
+        int 0x10
+
+        mov cx, 9
+        mov dx, 8
+        int 0x10
+        mov cx, 10
+        int 0x10
+
+        mov cx, 6
+        mov dx, 9
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+
+        mov cx, 6
+        mov dx, 10
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 15
+        int 0x10
+
+        mov cx, 2
+        mov dx, 11
+        int 0x10
+        mov cx, 3
+        int 0x10
+        mov cx, 6
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 15
+        int 0x10
+        mov cx, 16
+        int 0x10
+
+        mov cx, 2
+        mov dx, 12
+        int 0x10
+        mov cx, 3
+        int 0x10
+        mov cx, 4
+        int 0x10
+        mov cx, 6
+        int 0x10
+        mov cx, 7
+        int 0x10
+        mov cx, 8
+        int 0x10
+        mov cx, 9
+        int 0x10
+        mov cx, 10
+        int 0x10
+        mov cx, 11
+        int 0x10
+        mov cx, 12
+        int 0x10
+        mov cx, 13
+        int 0x10
+        mov cx, 15
+        int 0x10
+        mov cx, 16
+        int 0x10
+
+        call getch
 
 reboot:
         mov ds, ax
